@@ -67,8 +67,8 @@ async def cm_start1(callback: types.CallbackQuery):
                                       "персонажей?)")
         Temp[callback.from_user.id] = ['Саунд дизайнер для игр']
     elif callback.data == '5':
-        await callback.answer('Отлично! О нас: Мы амбициозная и быстроразвивающаяся команда, разрабатываютщая серию '
-                              'игр, которая инновационная и не повторимая!')
+        await callback.message.answer('Отлично! О нас: Мы амбициозная и быстроразвивающаяся команда, разрабатываютщая '
+                                      'серию игр, которая инновационная и не повторимая!')
         await callback.message.answer("Мог бы написать, какой у тебя есть опыт в создании ассетов или даже "
                                       "анимации персонажей?)")
         Temp[callback.from_user.id] = ['Графика для игр']
@@ -79,15 +79,20 @@ async def cm_start1(callback: types.CallbackQuery):
         await callback.message.answer("Мог бы написать, какой у тебя есть опыт в создании треков, желательно даже "
                                       "скинуть ссылки на твои лучшие работы!)")
 
-        Temp[callback.from_user.id] = ['Битмейкер']
+        Temp[callback.from_user.id] = 'Битмейкер'
 
     await FSMAdmin.experience.set()
 
 
-async def cm_start2(message: types.Message):
-    await FSMAdmin.number.set()
-    Temp[message.from_user.id] += [message.text]
-    await message.reply("Хорошо, теперь оставь свой пожалуйста номер телефона")
+async def cm_start2(message: types.Message, state: FSMContext):
+    await state.finish()
+    a = str(Temp[message.from_user.id])
+    a = a.replace("[", "")
+    a = a.replace("]", "")
+    a = a.replace("'", "")
+    Temp[message.from_user.id] = a + "  |  " + message.text
+    bd_func.job(message.from_user.id, Temp[message.from_user.id])
+    await message.reply("Хорошо, скоро менеджер с тобой свяжется!")
 
 
 async def cm_start3(message: types.Message, state: FSMContext):

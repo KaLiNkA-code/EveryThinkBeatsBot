@@ -8,6 +8,8 @@ Client_Start_b3 = KeyboardButton(text='Мои заказы')
 Client_Start_b4 = KeyboardButton(text='Связаться с менеджером')
 Client_Start_kb.add(Client_Start_b1, Client_Start_b2, Client_Start_b3, Client_Start_b4)
 
+Ordering_kb = ReplyKeyboardMarkup().add(Client_Start_b2)
+
 
 Yes_No_kb = InlineKeyboardMarkup()
 Yes = InlineKeyboardButton(callback_data='Yes', text='Да')

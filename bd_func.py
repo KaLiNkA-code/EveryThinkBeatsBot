@@ -10,22 +10,21 @@ conn = psycopg2.connect(dbname='postgres', user='postgres',
 cursor = conn.cursor()
 
 """Создание таблиц"""
-cursor.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, phone VARCHAR ( 50 ), where_know VARCHAR ( 100 ) );")
+cursor.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, name VARCHAR ( 50 ), phone VARCHAR ( 50 ), where_know VARCHAR ( 100 ), work VARCHAR ( 1000 ) );")
 
-cursor.execute('CREATE TABLE orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, bit VARCHAR ( 50 ), recording VARCHAR ( 50 ), mixing VARCHAR ( 50 ), platforms VARCHAR ( 50 ), about VARCHAR ( 2000 ) );')
-
-cursor.execute('CREATE TABLE offers (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, who VARCHAR ( 50 ), about VARCHAR ( 2000 ), phone VARCHAR ( 50 ) );')
+cursor.execute('CREATE TABLE orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, bit VARCHAR ( 50 ), recording VARCHAR ( 50 ), mixing VARCHAR ( 50 ), platforms VARCHAR ( 50 ), about VARCHAR ( 2000 ), numbers VARCHAR ( 15 ));')
 
 
-def register_user(tg_id, phone, where_know):
-    cursor.execute("INSERT INTO USERS(user_id_tg, phone, where_know) VALUES('{0}', '{1}', '{2}');".format(tg_id, phone,
-                                                                                                          where_know))
+def register_user(tg_id, name, phone, where_know):
+    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, work) VALUES('{0}', '{1}', '{2}', '{3}', '{4}');".format(tg_id, name, phone,
+                                                                                                          where_know, '0'))
     return 0
 
 
 def register_order(user_id_tg, bit, recording, mixing, platforms, about):
     cursor.execute("INSERT INTO orders(user_id_tg, bit, recording, mixing, platforms, about)"
-                   " VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}');".format(user_id_tg, bit, recording, mixing, platforms, about))
+                   " VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}');".format
+                   (user_id_tg, bit, recording, mixing, platforms, about))
     return 0
 
 
@@ -33,6 +32,10 @@ def register_offers(user_id_tg, who, about, phone):
     cursor.execute("INSERT INTO offers(user_id_tg, who, about, phone)"
                    " VALUES('{0}', '{1}', '{2}', {3});".format(user_id_tg, who, about, str(phone)))
     return 0
+
+
+def job(tg_id, text):
+    cursor.execute("UPDATE users SET work='{0}' WHERE user_id_tg='{1}'".format(text, tg_id))
 
 
 def check_user_exists(tg_id):
@@ -58,11 +61,13 @@ def get_users():
 
 
 def get_offers():
-    cursor.execute("SELECT * FROM offers;")
+    cursor.execute("SELECT * FROM users WHERE work != '0';")
     return cursor.fetchall()
 
 
 def get_orders():
+    #  cursor.execute("SELECT * FROM users WHERE work != '0';")
+
     cursor.execute("SELECT * FROM orders;")
     return cursor.fetchall()
 

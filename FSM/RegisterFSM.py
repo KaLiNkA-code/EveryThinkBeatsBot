@@ -4,6 +4,10 @@ from aiogram import types
 from aiogram import Dispatcher
 from create_bot import bot
 import bd_func
+from Keyboards import Client_kb, Admin_kb
+from heandlers.client_heandlers import admin
+
+
 Temp = {}
 
 
@@ -12,34 +16,30 @@ class FSMAdmin(StatesGroup):
     how = State()
 
 
-def check_mail(mail):
-    if mail[-8:] == "@mail.ru":
-        return True
-    elif mail[-10:] == "@gmail.com":
-        return True
-    elif mail[-9:] == "@inbox.ru":
-        return True
-    elif mail[-9:] == "yandex.ru":
-        return True
-    elif mail[-6:] == "@ya.ru":
-        return True
-    else:
-        if mail[-3:] == ".ru":
-            return True
-        elif mail[-4:] == ".com":
-            return True
-        else:
-            return False
-
-
-async def cm_start(message: types.Message):
+async def cm_start(message: types.Message, state: FSMContext):
     """Проверка на сущ. юзера и получение имени"""
 
-    await FSMAdmin.number.set()
-    await bot.send_message(message.from_user.id, f'Добрый день {message.from_user.first_name}! '
-                                                 f'Давайте познакомимся! Для совершения заказа это не обходимо)'
-                                                 f'Введите ваш номер телефона. Это необходимо для связи с вами, если'
-                                                 f'вы не сможете ответить в телеграм!)')
+    print(message)
+    if message.from_user.id in admin:
+        await bot.send_message(message.from_user.id, f'Привет) {message.from_user.first_name}',
+                               reply_markup=Admin_kb.Admin_Start_kb)
+        await state.finish()
+    else:
+        print('dddd')
+        a = bd_func.get_users()
+        x = 0
+        for i in a:
+            if str(message.from_user.id) == i[1]:
+                x = 1
+        if x:
+            await bot.send_message(message.from_user.id, f'Добрый день {message.from_user.first_name}! ', reply_markup=Client_kb.Client_Start_kb)
+
+        else:
+            await FSMAdmin.number.set()
+            await bot.send_message(message.from_user.id, f'Добрый день {message.from_user.first_name}! '
+                                                         f'Давайте познакомимся!)'
+                                                         f'Введите ваш номер телефона. Это необходимо для связи с вами,'
+                                                         f' если вы не сможете ответить в телеграм!)', reply_markup=types.ReplyKeyboardRemove())
 
 
 async def cm_start1(message: types.Message):
@@ -66,13 +66,13 @@ async def cm_start1(message: types.Message):
 
 
 async def cm_start3(message: types.Message, state: FSMContext):
-    bd_func.register_user(message.from_user.id, Temp[message.from_user.id][0], message.text)
+    bd_func.register_user(message.from_user.id, message.from_user.first_name,
+                          Temp[message.from_user.id][0], message.text)
     await state.finish()
-    await message.reply("Спасибо!) Все сохранено")
+    await message.reply("Спасибо, вы зарегистрированы!)", reply_markup=Client_kb.Client_Start_kb)
 
 
-def register_handlers_login(dp: Dispatcher):
-
+def register_handlers_register(dp: Dispatcher):
+    dp.register_message_handler(cm_start, commands=['start'], state=None)
     dp.register_message_handler(cm_start1, state=FSMAdmin.number)
     dp.register_message_handler(cm_start3, state=FSMAdmin.how)
-
