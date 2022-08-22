@@ -5,7 +5,7 @@ from aiogram import Dispatcher
 from create_bot import bot
 import bd_func
 from Keyboards import Client_kb, Admin_kb
-from heandlers.client_heandlers import admin
+from bd_func import admin
 
 
 Temp = {}

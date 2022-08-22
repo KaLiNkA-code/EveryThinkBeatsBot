@@ -2,11 +2,10 @@ from create_bot import bot
 from aiogram import types
 from aiogram import Dispatcher
 from Keyboards import Client_kb
-#  from Keyboards import Admin_kb
-import bd_func
-admin = [3]  # 814991257
 from FSM.CreateOrderingFSM import Temp_price
-
+import bd_func
+from bd_func import admin  # 814991257
+total_value = 0
 
 async def callback_d(callback: types.CallbackQuery):
     if callback.data == 'Manager_AandQ':
@@ -56,10 +55,32 @@ async def callback_d(callback: types.CallbackQuery):
         await bot.send_message(callback.from_user.id, 'Хм, какая странная кнопка')
 
 
+async def help_func(message: types.Message):
+    await bot.send_message(message.from_user.id, 'Давай познакомимся с интерфейсом:'
+                                                 '\nВ каталоге ты найдешь лучшие наши проекты'
+                                                 '\nЧтобы сделать заказ, нужно просто нажать соответствущую кнопку'
+                                                 '\nЧтобы Ответить на все остальные вопросы, нажмите Связаться с '
+                                                 'менеджером. Там присутствуют самые частозадаваемые вопросы')
+
+
 async def text(message: types.Message):
+    global total_value
     if message.from_user.id in admin:
+
+
+        try:
+            a = int(message.text)
+            total_value += a
+        except:
+            pass
+
         if message.text == 'osir4899dij95ijfnomwo9cje8icokwiood0e84678cj8i9eiijjidkvolxk':
             admin.remove(message.from_user.id)
+
+
+        elif message.text == 'Заработок':
+            await bot.send_message(message.from_user.id, '🤑')
+            await bot.send_message(message.from_user.id, f'За все время мы заработали: {total_value}')
 
         elif message.text == 'Статистика':
             a = bd_func.get_ids_of_users()
@@ -67,7 +88,6 @@ async def text(message: types.Message):
             for i in Temp_price.values():
                 total_price += int(i)
             await bot.send_message(message.from_user.id, f'Всего пользователей: {len(a)}')
-            await bot.send_message(message.from_user.id, f'За все время мы заработали: {total_price}')
 
         elif message.text == 'Заказы':
             a = bd_func.get_orders()
@@ -77,7 +97,9 @@ async def text(message: types.Message):
                 for j in b:
                     if i[1] == j[1]:
                         x += 1
-                        await bot.send_message(message.from_user.id, f"{i[1]}  |  {i[2]}  |  {i[3]}  |  {i[4]}  |  {i[5]}  |  {i[6]}  |  {j[3]}")
+                        await bot.send_message(message.from_user.id,
+                                               f"{i[1]}  |  {i[2]}  |  {i[3]}  |  {i[4]}  |  {i[5]}  |  {i[6]}  |  "
+                                               f"{j[3]}  |  {i[7]}р.")
             if x == 0:
                 await bot.send_message(message.from_user.id, "Заказов нету")
 
@@ -88,6 +110,7 @@ async def text(message: types.Message):
                 await bot.send_message(message.from_user.id, f"{i[1]}  |  {i[2]}  |  {i[3]}  |  {i[5]}")
 
         elif message.text == 'Пользователи':
+            await bot.send_message(message.from_user.id, "🤩")
             a = bd_func.get_users()
             if a:
 
@@ -103,16 +126,20 @@ async def text(message: types.Message):
             admin.append(message.from_user.id)
 
         elif message.text == 'Каталог':
+            await bot.send_message(message.from_user.id, '😍')
             await bot.send_message(message.from_user.id, 'Каталог пуст')
+
         elif message.text == 'Мои заказы':
             a = bd_func.get_orders()
             x = 0
+            await bot.send_message(message.from_user.id, "🤖")
             for i in a:
                 if i[1] == str(message.from_user.id):
+                    if x == 0:
+                        await bot.send_message(message.from_user.id, "Ваши заказы:")
                     x += 1
-                    await bot.send_message(message.from_user.id, "Ваши заказы:")
                     await bot.send_message(message.from_user.id, f"{i[2]}  |  {i[3]}  |  {i[4]}  |  "
-                                                                 f"{i[5]}  |  {i[6]}")
+                                                                 f"{i[5]}  |  {i[6]}  |  {i[7]}")
             if x == 0:
                 await bot.send_message(message.from_user.id, "Заказов пока что нет. Хотите сделать заказ?")
 
@@ -125,5 +152,6 @@ async def text(message: types.Message):
 
 def register_handlers_client(dp: Dispatcher):
     """Функция регистрации хендлеров"""
+    dp.register_message_handler(help_func, commands=['help'], state=None)
     dp.register_message_handler(text)
     dp.register_callback_query_handler(callback=callback_d)
