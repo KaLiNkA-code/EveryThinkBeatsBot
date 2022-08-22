@@ -77,7 +77,6 @@ async def text(message: types.Message):
         if message.text == 'osir4899dij95ijfnomwo9cje8icokwiood0e84678cj8i9eiijjidkvolxk':
             admin.remove(message.from_user.id)
 
-
         elif message.text == 'Заработок':
             await bot.send_message(message.from_user.id, '🤑')
             await bot.send_message(message.from_user.id, f'За все время мы заработали: {total_value}')

@@ -1,4 +1,3 @@
-import requests
 import xlsxwriter
 import psycopg2
 admin = [1]
