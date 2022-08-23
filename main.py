@@ -7,6 +7,9 @@ from FSM.NotificationsFSM import register_handlers_Notification
 from FSM.RegisterFSM import register_handlers_register
 
 
+APP_URL = f"https://everythinkbeats.herokuapp.com/5460098484:AAH2GnJwqjzE6dAQAUNtmo2OCNPOwvdMo_U"
+
+
 def on_startup():
     print('Бот вышел в online')
 
