@@ -3,8 +3,8 @@ import psycopg2
 admin = [1]
 
 
-conn = psycopg2.connect(dbname='dfherhd8286skj', user='mavtapzhtzkzxs',
-                        password='7386040f016933ac0deb1f414a5856c50eb82ea6d84a2e2fb64aafaf1eb820d9', port='5432')
+conn = psycopg2.connect(dbname='d3ervbj2hbv0q6', user='tzwkiojlzlbcll',
+                        password='1c22b5d10b402a5b5b0520a99e1a7d91c5a758864bf31f1d02ce24006bb453dd', port='5432')
 
 
 cursor = conn.cursor()
