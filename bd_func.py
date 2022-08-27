@@ -1,19 +1,23 @@
 import xlsxwriter
 import psycopg2
+import os
+
 admin = [1]
 
 
-conn = psycopg2.connect(dbname='d3ervbj2hbv0q6', user='tzwkiojlzlbcll',
-                        password='1c22b5d10b402a5b5b0520a99e1a7d91c5a758864bf31f1d02ce24006bb453dd', port='5432')
+conn = psycopg2.connect(os.environ.get("DATABASE_URL", "postgresql://test:test@localhost:5432/test"))
+
+# conn = psycopg2.connect(dbname='postgres', user='postgres',
+#                         password='2108Wert', host='localhost')
 
 
 cursor = conn.cursor()
 
 """Создание таблиц"""
-cursor.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, "
+cursor.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, "
                "name VARCHAR ( 50 ), phone VARCHAR ( 50 ), where_know VARCHAR ( 100 ), work VARCHAR ( 1000 ) );")
 
-cursor.execute('CREATE TABLE orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, '
+cursor.execute('CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, '
                'bit VARCHAR ( 50 ), recording VARCHAR ( 50 ), mixing VARCHAR ( 50 ), platforms VARCHAR ( 50 ), '
                'about VARCHAR ( 2000 ), numbers VARCHAR ( 15 ), price VARCHAR ( 50 ));')
 
@@ -21,20 +25,17 @@ cursor.execute('CREATE TABLE orders (id serial PRIMARY KEY, user_id_tg VARCHAR (
 def register_user(tg_id, name, phone, where_know):
     cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, work) VALUES('{0}', '{1}', '{2}', "
                    "'{3}', '{4}');".format(tg_id, name, phone, where_know, '0'))
-    return 0
 
 
 def register_order(user_id_tg, bit, recording, mixing, platforms, about, price):
     cursor.execute("INSERT INTO orders(user_id_tg, bit, recording, mixing, platforms, about, price)"
                    " VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');".format
                    (user_id_tg, bit, recording, mixing, platforms, about, price))
-    return 0
 
 
 def register_offers(user_id_tg, who, about, phone):
     cursor.execute("INSERT INTO offers(user_id_tg, who, about, phone)"
                    " VALUES('{0}', '{1}', '{2}', {3});".format(user_id_tg, who, about, str(phone)))
-    return 0
 
 
 def job(tg_id, text):

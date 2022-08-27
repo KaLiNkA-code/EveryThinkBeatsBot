@@ -7,6 +7,7 @@ import bd_func
 from bd_func import admin  # 814991257
 total_value = 0
 
+
 async def callback_d(callback: types.CallbackQuery):
     if callback.data == 'Manager_AandQ':
         await bot.send_message(callback.from_user.id, '@KaLiNkA_77', reply_markup=Client_kb.call_manager_kb)
@@ -89,24 +90,28 @@ async def text(message: types.Message):
             await bot.send_message(message.from_user.id, f'Всего пользователей: {len(a)}')
 
         elif message.text == 'Заказы':
-            a = bd_func.get_orders()
+            a = bd_func.get_orders()  # id, user_id_tg, bit, recording, mixing , platforms, about, numbers, price
             b = bd_func.get_users()
             x = 0
-            for i in a:
-                for j in b:
-                    if i[1] == j[1]:
+            for order in a:
+                for user in b:
+                    if order[1] == user[1]:
                         x += 1
                         await bot.send_message(message.from_user.id,
-                                               f"{i[1]}  |  {i[2]}  |  {i[3]}  |  {i[4]}  |  {i[5]}  |  {i[6]}  |  "
-                                               f"{j[3]}  |  {i[7]}р.")
+                                               f"{order[1]}  |  {order[2]}  |  {order[3]}  |  {order[4]}  |  "
+                                               f"{order[5]}  |  {order[6]}  |  {user[3]}  |  {order[8]}р.")
             if x == 0:
                 await bot.send_message(message.from_user.id, "Заказов нету")
 
         elif message.text == 'Заявки на работу':
             a = bd_func.get_offers()
-
+            x = 0
             for i in a:
+                x += 1
                 await bot.send_message(message.from_user.id, f"{i[1]}  |  {i[2]}  |  {i[3]}  |  {i[5]}")
+
+            if x == 0:
+                await bot.send_message(message.from_user.id, "Заявок на работу нет)")
 
         elif message.text == 'Пользователи':
             await bot.send_message(message.from_user.id, "🤩")
