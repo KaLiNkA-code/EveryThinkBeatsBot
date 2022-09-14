@@ -24,7 +24,7 @@ async def CreateOrdering_start(message: types.Message):
     await FSMAdmin.bit.set()
 
 
-async def CreateOrdering_bit(callback: types.CallbackQuery):
+async def CreateOrdering_bit(callback: types.CallbackQuery, state: FSMContext):
     try:
         if callback.data == 'Yes':
             Temp[callback.from_user.id] = ['бит нужен']
@@ -39,12 +39,12 @@ async def CreateOrdering_bit(callback: types.CallbackQuery):
                                                           ' студии со звукорежиссер?  (1490р /час) ',
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.recording.set()
-    except AttributeError:
-        await FSMAdmin.bit.set()
-        await bot.send_message(callback.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок')
+    except:
+        await state.finish()
+        await bot.send_message(callback.from_user.id, 'Заказ отменен!')
 
 
-async def CreateOrdering_recording(callback: types.CallbackQuery):
+async def CreateOrdering_recording(callback: types.CallbackQuery, state: FSMContext):
     try:
         if callback.data == 'Yes':
             Temp[callback.from_user.id] += ['Запись нужна']
@@ -58,12 +58,12 @@ async def CreateOrdering_recording(callback: types.CallbackQuery):
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.compilation.set()
 
-    except AttributeError:
-        await FSMAdmin.recording.set()
-        await bot.send_message(callback.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок)')
+    except:
+        await state.finish()
+        await bot.send_message(callback.from_user.id, 'Заказ отменен!')
 
 
-async def CreateOrdering_compilation(callback: types.CallbackQuery):
+async def CreateOrdering_compilation(callback: types.CallbackQuery, state: FSMContext):
     try:
         if callback.data == 'Yes':
             Temp_price[callback.from_user.id] = int(Temp_price[callback.from_user.id]) + 490
@@ -78,13 +78,12 @@ async def CreateOrdering_compilation(callback: types.CallbackQuery):
                                                           'платформы? (590р)',
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.unload.set()
+    except:
+        await state.finish()
+        await bot.send_message(callback.from_user.id, 'Заказ отменен!')
 
-    except AttributeError:
-        await FSMAdmin.compilation.set()
-        await bot.send_message(callback.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок)')
 
-
-async def CreateOrdering_unload(callback: types.CallbackQuery):
+async def CreateOrdering_unload(callback: types.CallbackQuery, state: FSMContext):
     try:
         if callback.data == 'Yes':
             Temp_price[callback.from_user.id] = int(Temp_price[callback.from_user.id]) + 590
@@ -96,20 +95,24 @@ async def CreateOrdering_unload(callback: types.CallbackQuery):
             await bot.send_message(callback.from_user.id, 'Есть ли какие то пожелания для твоего заказа?')
             await FSMAdmin.numbers.set()
 
-    except AttributeError:
-        await FSMAdmin.compilation.set()
-        await bot.send_message(callback.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок)')
+    except:
+        await state.finish()
+        await bot.send_message(callback.from_user.id, 'Заказ отменен!')
 
 
 async def CreateOrdering_number(message: types.Message, state: FSMContext):
-    print('dwd')
+    try:
 
-    bd_func.register_order(message.from_user.id, Temp[message.from_user.id][0],
-                           Temp[message.from_user.id][1], Temp[message.from_user.id][2],
-                           Temp[message.from_user.id][3], message.text, Temp_price[message.from_user.id])
+        bd_func.register_order(message.from_user.id, Temp[message.from_user.id][0],
+                               Temp[message.from_user.id][1], Temp[message.from_user.id][2],
+                               Temp[message.from_user.id][3], message.text, Temp_price[message.from_user.id])
 
-    await bot.send_message(message.from_user.id, f'Супер, заказ принят! Примерная стоимость: '
-                                                 f'{Temp_price[message.from_user.id]}р.')
+        await bot.send_message(message.from_user.id, f'Супер, заказ принят! Примерная стоимость: '
+                                                     f'{Temp_price[message.from_user.id]}р.')
+    except:
+        await state.finish()
+        await bot.send_message(message.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок)')
+
     await state.finish()
     Temp_price[message.from_user.id] = 0
     try:

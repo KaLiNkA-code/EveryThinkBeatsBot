@@ -12,16 +12,22 @@ class FSMAdmin(StatesGroup):
 
 
 async def text(message: types.Message):
-    await message.reply("Введи текст, который хочешь разослать всем")
+    await message.reply("Введи текст, который хочешь разослать всем или напиши 'Х'")
     await FSMAdmin.text.set()
 
 
 async def text2(message: types.Message, state: FSMContext):
     await state.finish()
     a = bd_func.get_users()
-    for i in a:
-        await bot.send_message(i[1], message.text)
-    await message.reply("Отправилось!")
+    if message.text in ['x', 'X', 'Х', 'х'] or \
+            message.text in ['Каталог', 'Сделать заказ', 'Мои заказы', 'Связаться с менеджером']:
+        bot.send_message(message.from_user.id, 'Отменил!')
+        await state.finish()
+    else:
+        for i in a:
+            await bot.send_message(i[1], message.text)
+        await message.reply("Отправилось!")
+        await state.finish()
 
 
 def register_handlers_Notification(dp: Dispatcher):
