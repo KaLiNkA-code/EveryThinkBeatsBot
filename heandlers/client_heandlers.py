@@ -129,9 +129,9 @@ async def text(message: types.Message):
         if message.text == 'osir4899dij95ijfnomwo9cje8icokwiood0e84678cj8i9eiijjidkvolxk':
             admin.append(message.from_user.id)
 
-        elif message.text == 'Каталог':
-            await bot.send_message(message.from_user.id, '😍')
-            await bot.send_message(message.from_user.id, 'Каталог пуст')
+        # elif message.text == 'Каталог':
+        #     await bot.send_message(message.from_user.id, '😍')
+        #     await bot.send_message(message.from_user.id, 'Каталог пуст')
 
         elif message.text == 'Мои заказы':
             a = bd_func.get_orders()
@@ -154,8 +154,14 @@ async def text(message: types.Message):
             await bot.send_message(message.from_user.id, 'Я вас не понимаю')
 
 
+async def sound(message: types.Message):
+    await bot.edit_message_text(message.from_user.id, 'Снипеты наших последних проектов:')
+    await message.audio.download(destination_file="data/Codein.mp3")
+
+
 def register_handlers_client(dp: Dispatcher):
     """Функция регистрации хендлеров"""
     dp.register_message_handler(help_func, commands=['help'], state=None)
+    dp.register_message_handler(sound, text='Каталог')
     dp.register_message_handler(text)
     dp.register_callback_query_handler(callback=callback_d)
