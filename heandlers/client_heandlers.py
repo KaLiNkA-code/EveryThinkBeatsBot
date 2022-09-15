@@ -157,7 +157,7 @@ async def text(message: types.Message):
 async def sound(message: types.Message):
     try:
         await bot.send_message(message.from_user.id, 'Снипеты наших последних проектов:')
-        await bot.send_audio(message.from_user.id, open("data/Codein.mp3", "r"), performer="EveryThingBeats", title="Codein")
+        await bot.send_audio(message.from_user.id, open("data/Codein.mp3", "r"))
     except BaseException as err:
         bot.send_message(message.from_user.id, err)
         raise
