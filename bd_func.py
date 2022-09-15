@@ -23,7 +23,9 @@ cursor.execute('CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, user_i
 
 
 def register_user(user_id_tg, name, phone, where_know):
-    cursor.execute(f"INSERT INTO USERS({user_id_tg}, {name}, {phone}, {where_know}, {'0'});")
+    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, '0')"
+                   " VALUES('{0}', '{1}', '{2}', '{3}');".format
+                   (user_id_tg, name, phone, where_know))
 
 
 def register_order(user_id_tg, bit, recording, mixing, platforms, about, price):
