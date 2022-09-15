@@ -56,13 +56,13 @@ async def cm_start1(message: types.Message):
                 Temp[message.from_user.id] = [temp]
             else:
                 await FSMAdmin.number.set()
-                await message.reply('Не корректный ввод, попробуй еще раз')
+                await message.reply('Не корректный ввод, попробуй еще ра1')
         else:
             await FSMAdmin.number.set()
-            await message.reply('Не корректный ввод, попробуй еще раз')
-    except ValueError:
+            await message.reply('Не корректный ввод, попробуй еще раз2')
+    except BaseException as Err:
         await FSMAdmin.number.set()
-        await message.reply('Не корректный ввод, попробуй еще раз')
+        await message.reply(f'Не корректный ввод, попробуй еще раз {Err}')
 
 
 async def cm_start3(message: types.Message, state: FSMContext):
