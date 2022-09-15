@@ -22,10 +22,9 @@ cursor.execute('CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, user_i
                'about VARCHAR ( 2000 ), numbers VARCHAR ( 15 ), price VARCHAR ( 50 ));')
 
 
-def register_user(user_id_tg, name, phone, where_know):
-    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, '0')"
-                   " VALUES('{0}', '{1}', '{2}', '{3}');".format
-                   (user_id_tg, name, phone, where_know))
+def register_user(tg_id, name, phone, where_know):
+    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, work) VALUES('{0}', '{1}', '{2}', "
+                   "'{3}', '{4}');".format(tg_id, name, phone, where_know, '0'))
 
 
 def register_order(user_id_tg, bit, recording, mixing, platforms, about, price):
