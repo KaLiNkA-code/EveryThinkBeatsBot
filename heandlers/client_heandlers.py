@@ -133,6 +133,13 @@ async def text(message: types.Message):
 
             await bot.send_message(message.from_user.id, 'Снипеты наших последних проектов:')
             await bot.send_audio(message.chat.id, open('data/Ever.mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/Facts.mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/Forget you 97 bpm (1).mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/K9.mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/Money.mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/Scrlxrd Type.mp3', 'rb'))
+            await bot.send_audio(message.chat.id, open('data/Swag Boy.mp3', 'rb'))
+
 
         elif message.text == 'Мои заказы':
             a = bd_func.get_orders()
