@@ -155,8 +155,12 @@ async def text(message: types.Message):
 
 
 async def sound(message: types.Message):
-    await bot.edit_message_text(message.from_user.id, 'Снипеты наших последних проектов:')
-    await message.audio.download(destination_file="data/Codein.mp3")
+    try:
+        await bot.send_message(message.from_user.id, 'Снипеты наших последних проектов:')
+        await message.audio.download(destination_file="data/Codein.mp3")
+    except BaseException as err:
+        bot.send_message(message.from_user.id, err)
+        raise
 
 
 def register_handlers_client(dp: Dispatcher):
