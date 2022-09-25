@@ -20,7 +20,10 @@ class FSMAdmin(StatesGroup):
 
 async def CreateOrdering_start(message: types.Message):
     """Проверка на сущ. юзера и получение имени"""
-    await message.reply('Тебе нужен бит? (390р)', reply_markup=Client_kb.Yes_No_kb)
+    if bd_func.check_language(message.from_user.id):
+        await message.reply('Тебе нужен бит? (390р)', reply_markup=Client_kb.Yes_No_kb)
+    else:
+        await message.reply('Do you need a bit? (15$)', reply_markup=Client_kb.Yes_No_ENG_kb)
     await FSMAdmin.bit.set()
 
 
@@ -29,16 +32,30 @@ async def CreateOrdering_bit(callback: types.CallbackQuery, state: FSMContext):
         if callback.data == 'Yes':
             Temp[callback.from_user.id] = ['бит нужен']
             Temp_price[callback.from_user.id] = 390
-            await bot.send_message(callback.from_user.id, 'Хорошо, нужна ли запись голоса на профессиональной '
-                                                          'студии со звукорежиссер? (1490р /час) ',
-                                   reply_markup=Client_kb.Yes_No_kb)
-            await FSMAdmin.recording.set()
-        else:
-            Temp[callback.from_user.id] = ['бит не нужен']
             await bot.send_message(callback.from_user.id, 'Хорошо, нужна ли запись голоса на профессиональной'
                                                           ' студии со звукорежиссер?  (1490р /час) ',
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.recording.set()
+        elif callback.data == 'No':
+            Temp_price[callback.from_user.id] = 0
+            await bot.send_message(callback.from_user.id, 'Хорошо, нужна ли запись голоса на профессиональной'
+                                                          ' студии со звукорежиссер?  (1490р /час) ',
+                                   reply_markup=Client_kb.Yes_No_kb)
+            Temp[callback.from_user.id] = ['бит не нужен']
+        elif callback.data == 'Y':
+            Temp[callback.from_user.id] = ['bit is needed']
+            Temp_price[callback.from_user.id] = 15
+            await bot.send_message(callback.from_user.id, 'Okay, is it necessary to record your voice in a '
+                                                          'professional studio with a sound engineer? ($125 an hour)',
+                                   reply_markup=Client_kb.Yes_No_kb)
+        else:
+            Temp[callback.from_user.id] = ["bit is not needed"]
+            Temp_price[callback.from_user.id] = 0
+            await bot.send_message(callback.from_user.id, 'Okay, is it necessary to record your voice in a '
+                                                          'professional studio with a sound engineer? ($125 an hour)',
+                                   reply_markup=Client_kb.Yes_No_ENG_kb)
+
+        await FSMAdmin.recording.set()
     except:
         await state.finish()
         await bot.send_message(callback.from_user.id, 'Заказ отменен!')
@@ -52,8 +69,20 @@ async def CreateOrdering_recording(callback: types.CallbackQuery, state: FSMCont
             await bot.send_message(callback.from_user.id, 'Нужно ли тебе сведение? (490р)',
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.compilation.set()
-        else:
+        elif callback.data == 'No':
             Temp[callback.from_user.id] += ['Запись не нужна']
+            await bot.send_message(callback.from_user.id, 'Нужно ли тебе сведение? (490р)',
+                                   reply_markup=Client_kb.Yes_No_kb)
+            await FSMAdmin.compilation.set()
+
+        elif callback.data == 'Y':
+            Temp[callback.from_user.id] += ['record is needed']
+            Temp_price[callback.from_user.id] = int(Temp_price[callback.from_user.id]) + 125
+            await bot.send_message(callback.from_user.id, 'Нужно ли тебе сведение? (490р)',
+                                   reply_markup=Client_kb.Yes_No_kb)
+            await FSMAdmin.compilation.set()
+        else:
+            Temp[callback.from_user.id] += ['a record is not needed']
             await bot.send_message(callback.from_user.id, 'Нужно ли тебе сведение? (490р)',
                                    reply_markup=Client_kb.Yes_No_kb)
             await FSMAdmin.compilation.set()

@@ -16,6 +16,12 @@ Yes = InlineKeyboardButton(callback_data='Yes', text='Да')
 No = InlineKeyboardButton(callback_data='No', text='Нет')
 Yes_No_kb.add(Yes, No)
 
+
+Yes_No_ENG_kb = InlineKeyboardMarkup()
+Yes = InlineKeyboardButton(callback_data='Y', text='Yes')
+No = InlineKeyboardButton(callback_data='N', text='No')
+Yes_No_ENG_kb.add(Yes, No)
+
 call_manager_kb = InlineKeyboardMarkup().add(InlineKeyboardButton('Менеджер',
                                                                   url='https://web.telegram.org/z/#814991257'))
 
