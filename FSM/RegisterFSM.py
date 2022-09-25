@@ -107,7 +107,7 @@ async def cm_start3(message: types.Message, state: FSMContext):
 
         await message.reply("Спасибо, вы зарегистрированы!)", reply_markup=Client_kb.Client_Start_kb)
     else:
-        await message.reply("Thank you, you are registered!)", reply_markup=Client_kb.Client_Start_kb)
+        await message.reply("Thank you, you are registered!)", reply_markup=Client_kb.Client_Start_ENG_kb)
 
 
 def register_handlers_register(dp: Dispatcher):

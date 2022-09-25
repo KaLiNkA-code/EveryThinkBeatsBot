@@ -132,9 +132,9 @@ async def text(message: types.Message):
             if message.text == 'osir4899dij95ijfnomwo9cje8icokwiood0e84678cj8i9eiijjidkvolxk':
                 admin.append(message.from_user.id)
 
-            elif message.text == 'Каталог':
-
-                await bot.send_message(message.from_user.id, 'Снипеты наших последних проектов:')
+            elif message.text in ['Каталог', 'Catalog']:
+                text = 'Снипеты наших последних проектов:' if bd_func.check_language(message.from_user.id) else 'Snippets of our latest projects:'
+                await bot.send_message(message.from_user.id, text)
                 await bot.send_audio(message.chat.id, open('data/Ever.mp3', 'rb'))
                 await bot.send_audio(message.chat.id, open('data/Facts.mp3', 'rb'))
                 await bot.send_audio(message.chat.id, open('data/Forget you 97 bpm (1).mp3', 'rb'))
@@ -143,20 +143,28 @@ async def text(message: types.Message):
                 await bot.send_audio(message.chat.id, open('data/Scrlxrd Type.mp3', 'rb'))
                 await bot.send_audio(message.chat.id, open('data/Swag Boy.mp3', 'rb'))
 
-            elif message.text == 'Мои заказы':
+            elif message.text in ['Мои заказы', 'Orders']:
                 a = bd_func.get_orders()
                 x = 0
                 await bot.send_message(message.from_user.id, "🤖")
                 for i in a:
                     if i[1] == str(message.from_user.id):
                         if x == 0:
-                            await bot.send_message(message.from_user.id, "Ваши заказы:")
+                            text = 'Ваши заказы:' if bd_func.check_language(message.from_user.id) else 'Your orders:'
+                            await bot.send_message(message.from_user.id, text)
                         x += 1
                         print(i)
-                        await bot.send_message(message.from_user.id, f"{i[2]}  |  {i[3]}  |  {i[4]}  |  "
-                                                                     f"{i[5]}  |  {i[6]}  |  {i[8]}")
+                        if bd_func.check_language(message.from_user.id):
+                            await bot.send_message(message.from_user.id, f"{i[2]}  |  {i[3]}  |  {i[4]}  |  "
+                                                                        f"{i[5]}  |  {i[6]}  |  {i[8]}р.")
+                        else:
+                            await bot.send_message(message.from_user.id, f"{i[2]}  |  {i[3]}  |  {i[4]}  |  "
+                                                                         f"{i[5]}  |  {i[6]}  |  ${i[8]}")
                 if x == 0:
-                    await bot.send_message(message.from_user.id, "Заказов пока что нет. Хотите сделать заказ?")
+                    text = 'Заказов пока что нет. Хотите сделать заказ?' if \
+                        bd_func.check_language(message.from_user.id) else 'No orders yet. Would you like to place ' \
+                                                                          'an order?'
+                    await bot.send_message(message.from_user.id, text)
 
             elif message.text == 'Связаться с менеджером':
                 await bot.send_message(message.from_user.id, 'Ответы на самые часто задаваемые вопросы',

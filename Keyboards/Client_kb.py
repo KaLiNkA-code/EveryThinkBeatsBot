@@ -8,6 +8,15 @@ Client_Start_b3 = KeyboardButton(text='Мои заказы')
 Client_Start_b4 = KeyboardButton(text='Связаться с менеджером')
 Client_Start_kb.add(Client_Start_b1, Client_Start_b2, Client_Start_b3, Client_Start_b4)
 
+
+Client_Start_ENG_kb = ReplyKeyboardMarkup(row_width=1)
+Client_Start_ENG_b1 = KeyboardButton(text='Catalog')
+Client_Start_ENG_b2 = KeyboardButton(text='Place an order')
+Client_Start_ENG_b3 = KeyboardButton(text='Orders')
+Client_Start_ENG_b4 = KeyboardButton(text='Contact Manager')
+Client_Start_ENG_kb.add(Client_Start_ENG_b1, Client_Start_ENG_b2, Client_Start_ENG_b3, Client_Start_ENG_b4)
+
+
 Ordering_kb = ReplyKeyboardMarkup().add(Client_Start_b2)
 
 
