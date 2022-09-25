@@ -109,9 +109,10 @@ async def CreateOrdering_number(message: types.Message, state: FSMContext):
 
         await bot.send_message(message.from_user.id, f'Супер, заказ принят! Примерная стоимость: '
                                                      f'{Temp_price[message.from_user.id]}р.')
-    except:
+    except BaseException as f:
         await state.finish()
-        await bot.send_message(message.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок)')
+        await bot.send_message(message.from_user.id, 'Пожалуйста, воспользуйся вводом с кнопок')
+        await bot.send_message(814991257, f)
 
     await state.finish()
     Temp_price[message.from_user.id] = 0

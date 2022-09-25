@@ -98,6 +98,8 @@ async def text(message: types.Message):
                     for user in b:
                         if order[1] == user[1]:
                             x += 1
+                            print(order)
+                            print(user)
                             await bot.send_message(message.from_user.id,
                                                    f"{order[1]}  |  {order[2]}  |  {order[3]}  |  {order[4]}  |  "
                                                    f"{order[5]}  |  {order[6]}  |  {user[3]}  |  {order[8]}р.")
@@ -150,8 +152,9 @@ async def text(message: types.Message):
                         if x == 0:
                             await bot.send_message(message.from_user.id, "Ваши заказы:")
                         x += 1
+                        print(i)
                         await bot.send_message(message.from_user.id, f"{i[2]}  |  {i[3]}  |  {i[4]}  |  "
-                                                                     f"{i[5]}  |  {i[6]}  |  {i[7]}")
+                                                                     f"{i[5]}  |  {i[6]}  |  {i[8]}")
                 if x == 0:
                     await bot.send_message(message.from_user.id, "Заказов пока что нет. Хотите сделать заказ?")
 

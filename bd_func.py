@@ -5,26 +5,27 @@ import os
 admin = [1]
 
 
-conn = psycopg2.connect(os.environ.get("DATABASE_URL", "postgresql://test:test@localhost:5432/test"))
+#  conn = psycopg2.connect(os.environ.get("DATABASE_URL", "postgresql://test:test@localhost:5432/test"))
 
-# conn = psycopg2.connect(dbname='postgres', user='postgres',
-#                         password='2108Wert', host='localhost')
+conn = psycopg2.connect(dbname='postgres', user='postgres',
+                        password='2108Wert', host='localhost')
 
 
 cursor = conn.cursor()
 
 """Создание таблиц"""
 cursor.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, "
-               "name VARCHAR ( 50 ), phone VARCHAR ( 50 ), where_know VARCHAR ( 100 ), work VARCHAR ( 1000 ) );")
+               "name VARCHAR ( 50 ), phone VARCHAR ( 50 ), where_know VARCHAR ( 100 ), work VARCHAR ( 1000 ), language "
+               "VARCHAR ( 5 ));")
 
-cursor.execute('CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) UNIQUE NOT NULL, '
+cursor.execute('CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, user_id_tg VARCHAR ( 50 ) NOT NULL, '
                'bit VARCHAR ( 50 ), recording VARCHAR ( 50 ), mixing VARCHAR ( 50 ), platforms VARCHAR ( 50 ), '
                'about VARCHAR ( 2000 ), numbers VARCHAR ( 15 ), price VARCHAR ( 50 ));')
 
 
-def register_user(tg_id, name, phone, where_know):
-    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, work) VALUES('{0}', '{1}', '{2}', "
-                   "'{3}', '{4}');".format(tg_id, name, phone, where_know, '0'))
+def register_user(tg_id, name, phone, where_know, language):
+    cursor.execute("INSERT INTO USERS(user_id_tg, name, phone, where_know, work, language) VALUES('{0}', '{1}', '{2}', "
+                   "'{3}', '{4}', '{5}');".format(tg_id, name, phone, where_know, '0', language))
 
 
 def register_order(user_id_tg, bit, recording, mixing, platforms, about, price):
@@ -74,6 +75,16 @@ def get_orders():
 
     cursor.execute("SELECT * FROM orders;")
     return cursor.fetchall()
+
+
+def check_language(tg_id):
+    """Проверка существования юзера"""
+    cursor.execute(f"SELECT * FROM users WHERE user_id_tg = '{tg_id}';")
+    a = cursor.fetchall()[0][6]
+    if a == "RU":
+        return True
+    else:
+        return False
 
 
 """//////////////////////////////////////////////////////////////////////////////////////////////////////////////////"""

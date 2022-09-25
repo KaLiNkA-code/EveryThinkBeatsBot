@@ -36,6 +36,12 @@ AandQ_Payment_b1 = InlineKeyboardButton(callback_data='guarantees_Payment_AandQ'
 AandQ_Payment_b2 = InlineKeyboardButton(callback_data='methods_Payment_AandQ', text='способ оплаты')
 AandQ_Payment_kb.add(AandQ_Payment_b1, AandQ_Payment_b2)
 
+
+Language_kb = InlineKeyboardMarkup(row_width=1)
+Language_b1 = InlineKeyboardButton(callback_data="ENG", text="English")
+Language_b2 = InlineKeyboardButton(callback_data="RU", text="Russian")
+Language_kb.add(Language_b1, Language_b2)
+
 FSM_reg_kb1 = InlineKeyboardMarkup(row_width=3)
 FSM_reg_b1 = InlineKeyboardButton(callback_data='1', text='1')
 FSM_reg_b2 = InlineKeyboardButton(callback_data='2', text='2')
